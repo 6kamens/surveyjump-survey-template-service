@@ -4,6 +4,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const helmet = require('helmet');
 const db = require('./entity');
+const routes = require('./routes');
+const { route } = require('./routes');
 
 dotenv.config();
 app.use(express.json());
@@ -13,16 +15,19 @@ app.use(helmet());
 const port = process.env.PORT || 3000;
 
 
-
 app.get('/handcheck',(req,res)=>{
     res.json({status:true});
 });
+
+app.use('/api',routes);
 
 app.use((req,res)=>{
     res.status(404).send('SURVEYJUMP-TEMPLATE-API');
 });
 
-db.sequelize.sync().then(()=>{
+
+
+db.sequelize.sync({force:true}).then(()=>{
     app.listen(port,()=>{
         console.log(`app is running on port ${port}`);
     });

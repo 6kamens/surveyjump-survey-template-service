@@ -1,8 +1,7 @@
-const { sequelize } = require(".");
 
 module.exports = (sequelize,DataTypes)=>{
     const model = sequelize.define(
-        'SURVEY_TEMPLATE',{
+        'SurveyTemplate',{
             survey_id:{
                 type: DataTypes.INTEGER ,
                 autoIncrement:true,
@@ -26,6 +25,7 @@ module.exports = (sequelize,DataTypes)=>{
                 type:DataTypes.DATE,
             }
         },{
+            tableName : 'SURVEY_TEMPLATE',
             indexes:[
                 {
                     fields:['survey_code'],
@@ -36,14 +36,18 @@ module.exports = (sequelize,DataTypes)=>{
                 },
                 {
                     fields:['survey_status']
-                },
-                {
-                    fields:['created_date',{order:'DESC'}]
-                },
-                {
-                    fields:['updated_date',{order:'DESC'}]
                 }
             ]
         }
-    )
+        
+    );
+
+    model.associate = models=>{
+        model.hasMany(models.SurveyQuestion,{foreignKey : {name : 'survey_id' , allowNull: false }});
+        model.hasOne(models.SurveyHeaderTemplate,{foreignKey:{name:'survey_id', allowNull: false }});
+        model.hasOne(models.SurveyFooterTemplate,{foreignKey:{name:'survey_id', allowNull:false}});
+        model.hasOne(models.SurveyStyleTemplate,{foreignKey:{name:'survey_id', allowNull:false}});
+    };
+
+    return model;
 }
