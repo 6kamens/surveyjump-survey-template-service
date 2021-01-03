@@ -7,4 +7,8 @@ surveyTemplateController.surveyTemplateValidator('create-new-template') ,
 surveyTemplateController.createNewTemplate);
 
 
+router.get('/get-survey-template/:id',
+surveyTemplateController.surveyTemplateValidator('getSurveyTemplate'),
+surveyTemplateController.getSurveyTemplate);
+
 module.exports = router;

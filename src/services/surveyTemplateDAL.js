@@ -42,3 +42,16 @@ module.exports.insertNewSurveyTemplate = async (request)=>{
     return result;
 
 }
+
+
+module.exports.getSurveyTemplateById = async (id)=>{
+    
+    const query = await db.SurveyTemplate.findOne({where:{survey_id:id , survey_status:true}, 
+        include: [db.SurveyHeaderTemplate , 
+            db.SurveyFooterTemplate , 
+            db.SurveyStyleTemplate ,
+            db.SurveyQuestion]});
+
+    return query;
+
+}
