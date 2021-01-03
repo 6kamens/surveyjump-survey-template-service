@@ -24,7 +24,7 @@ module.exports.createNewTemplate = async (req,res)=>{
             return res.json({result:false,message:result.array() });
         }
 
-        const createSurvey = await surveyTemplateDAL.insertNewSurveyTemplate(
+        const createSurvey = await  surveyTemplateDAL.insertNewSurveyTemplate(
             {
               surveyCode : req.body.surveyCode,
               surveyType: req.body.surveyType,
@@ -47,11 +47,18 @@ module.exports.createNewTemplate = async (req,res)=>{
             }
         );
 
-        // const insertQuestions = surveyQuestionDAL.insertMultiQuestion(res.body.questions.map((q=>{q,
-        //     createdDate :
-        // })));
+        const insertQuestions = await surveyQuestionDAL.insertMultiQuestion(req.body.questions.map(q=> ({
+            input_type: q.inputType,
+            question:q.question,
+            answer:q.answer,
+            is_required_answer: q.isRequiredAnswer,
+            allow_multi_answer : q.allowMultiAnswer,
+            status: true,
+            created_date : Date.now(),
+            survey_id : createSurvey.survey_id 
+        })));
         
-        return res.json({result:true,message:'success' , data : { template: createSurvey , questions : 'dd' } });
+        return res.json({result:true,message:'success' , data : { template: { surveyId : createSurvey.survey_id , surveyCode : createSurvey.survey_code} , questions : insertQuestions.map(q=>({question_id:q.id})) } });
 
     } catch (error) {
         return res.json({result:false,message: error.message});

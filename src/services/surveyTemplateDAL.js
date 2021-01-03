@@ -35,9 +35,10 @@ module.exports.insertNewSurveyTemplate = async (request)=>{
             created_date:Date.now(),
             survey_id :  survey.survey_id
         }, { transaction: t });
-    
-        return survey;
-      });
 
+        return survey;
+    });
+
+    return result;
 
 }

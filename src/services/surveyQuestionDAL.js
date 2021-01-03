@@ -11,4 +11,7 @@ module.exports.insertMultiQuestion = async (request)=>{
           return questions ;
     });
 
+    return result;
+
+
 }
